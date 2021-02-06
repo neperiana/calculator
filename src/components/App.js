@@ -8,8 +8,11 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
-// calculator logic
-import resolve_formula from './../tools/calculator'
+// eval wrapper
+function resolve(givenFormula) {
+  let formula = givenFormula.replace("✕", "*").replace("÷", "/");
+  return (eval(formula));
+}
 
 // Main App Component
 class App extends Component {
@@ -17,7 +20,7 @@ class App extends Component {
     super();
     this.state = {
       formula: '',
-      result: '0.00',
+      result: '0.0000',
     };
     this.handleInteraction = this.handleInteraction.bind(this);
     this.handleButtonPress = this.handleButtonPress.bind(this);
@@ -29,14 +32,14 @@ class App extends Component {
       case "C":
         this.setState({ 
           formula: '',
-          result: '0.00',
+          result: '0.0000',
         });
         break;
       case "=":
-        let fresh_result = resolve_formula(this.state.formula);
+        let fresh_result = resolve(this.state.formula);
         this.setState({ 
           formula: '',
-          result: fresh_result,
+          result: fresh_result.toFixed(4),
         });
         break;
       default:
@@ -48,8 +51,9 @@ class App extends Component {
 
           new_formula += " " + key + " ";
         } else {
-          new_formula += + key;
+          new_formula += key;
         }
+
         this.setState({ 
           formula: new_formula,
         });
@@ -62,10 +66,10 @@ class App extends Component {
   }
   // TO DO: fix key interactions
   handleKeyPress(event){
-    let key = event.key.toUpperCase();
-    let calculator_keys = [];
+    let key = event.key.toUpperCase().replace('ENTER','=').replace('*','✕').replace('/','÷');
+    let calculator_keys = ['(',')','C','7','8','9','÷','4','5','6','✕','1','2','3','-','0','.','=','+'];
     if (calculator_keys.includes(key)) {
-      document.getElementById(key).click();
+      this.handleInteraction(key);
     }
   }
   componentDidMount() {

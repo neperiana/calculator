@@ -25,6 +25,18 @@
   box-shadow: 5px 5px #999999;
 }
 
+@media (min-width: 600px) {
+  #calculator {
+    width: 50vw;
+  }
+}
+@media (min-width: 1000px) {
+  #calculator {
+    width: 25vw;
+    height: 60vh;
+  }
+}
+
 #display {
   width: 100%;
   height: 25%;
